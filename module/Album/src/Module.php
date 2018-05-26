@@ -1,12 +1,10 @@
 <?php
 namespace Album;
 
-use Zend\ModuleManager\Feature\ControllerProviderInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
-// use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
 
 class Module implements ConfigProviderInterface
@@ -21,14 +19,27 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Model\AlbumTable::class => function($container) {
-                    $tableFateway = $container->get(Model\AlbumTableGateway::class);
+                    $tableGateway = $container->get(Model\AlbumTableGateway::class);
                     return new Model\AlbumTable($tableGateway);
                 },
                 Model\AlbumTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype new ResultSet();
-                    $resultSetPrototype->setArryObjectPrototype(new Model\Album());
-                    return new TableGateway('album', $dbAdapter, null $resultSetPrototype);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Album());
+                    return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                },
+            ],
+        ];
+    }
+    
+    public function getControllerConfig()
+    {
+        return [
+            'factories' => [
+                Controller\AlbumController::class => function($container) {
+                    return new Controller\AlbumController(
+                        $container->get(Model\AlbumTable::class)
+                        );
                 },
             ],
         ];
