@@ -25,7 +25,7 @@ class AlbumTable
         $row = $rowset->current();
         if (! $row) {
             throw new RuntimeException(sprintf(
-                'Could not finc row with identifier %d',
+                'Could not find row with identifier %d',
                 $id
             ));
         }
@@ -42,7 +42,7 @@ class AlbumTable
         
         $id = (int) $album->id;
         
-        if($id === 0){
+        if ($id === 0){
             $this->tableGateway->insert($data);
             return;
         }
