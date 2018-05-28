@@ -46,8 +46,11 @@ class AlbumController extends AbstractActionController
             return ['form' => $form];
         }
         
+        /* If the form is valid, then we grab the data from the form and store to the model using saveAlbum(). */
         $album->exchangeArray($form->getData());
         $this->table->saveAlbum($album);
+        
+        /* After we have saved the new album row, we redirect back to the list of albums using the Redirect controller plugin. */
         return $this->redirect()->toRoute('album');
     }
     
