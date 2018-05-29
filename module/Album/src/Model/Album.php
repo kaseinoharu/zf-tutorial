@@ -7,91 +7,89 @@ use Zend\Filter\StripTags;
 use Zend\Filter\ToInt;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\Inputfilter\InputFilterInterface;
+use Zend\InputFilter\InputFilterInterface;
 use Zend\Validator\StringLength;
 
 class Album implements InputFilterAwareInterface
 {
-	public $id;
-	public $artist;
-	public $title;
+    public $id;
+    public $artist;
+    public $title;
 
-	private $inputFilter;
-	
-	public function exchangeArray(array $data)
-	{
-	    $this->id = !empty($data['id']) ? $data['id'] : null;
-	    $this->artist = !empty($data['artist']) ? $data['artist'] : null;
-	    $this->title = !empty($data['title']) ? $data['title'] : null;
-	}
-	
-	public function setInputFilter(InputFilterInterface $inputFilter)
-	{
-	    // I don't need to implement this fuction except thorowing exception.
-	    
-	    throw new DomainException(sprintf(
-	        '%s does not allow injection of an alternate input filter',
-	        __CLASS__
+    private $inputFilter;
+
+    public function exchangeArray(array $data)
+    {
+        $this->id     = !empty($data['id']) ? $data['id'] : null;
+        $this->artist = !empty($data['artist']) ? $data['artist'] : null;
+        $this->title  = !empty($data['title']) ? $data['title'] : null;
+    }
+
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        // I don't need to implement this fuction except thorowing exception.
+        
+        throw new DomainException(sprintf(
+            '%s does not allow injection of an alternate input filter',
+            __CLASS__
         ));
-	}
-	
-	public function getInputFilter()
-	{
-	    if ($this->inputFilter) {
-	        return $this->inputFilter;
-	    }
-	    
-	    $inputFilter = new InputFilter();
-	    
-	    $inputFilter->add([
-	        'name' => 'id',
-	        'required' => true,
-	        'filters' => [
-	            ['name' => ToInt::class],
-	        ],
-	    ]);
-	    
-	    $inputFilter->add([
-	        'name' => 'artist',
-	        'requred' => true,
-	        'filters' => [
-	            ['name' => StripTags::class],   // Remove unwanted HTML
-	            ['name' => StringTrim::class],  // Remove unnecessary white space
-	        ],
-	        'validators' => [
-	            [
-	                'name' => [
-	                    'name' => StringLength::class,
-	                    'options' => [
-	                        'encoding' => 'UTF8',
-	                        'min' => 1,
-	                        'max' => 100,
-	                    ],
-	                ],
-	            ],
-	        ],
-	    ]);
-	    
-	    $inputFilter->add([
-	        'name' => 'title',
-	        'required' => true,
-	        'filters' => [
-	            ['name' => StripTAgs::class],
-	            ['name' => StringTrim::class],
-	        ],
-	        'validators' => [
-	            [
-	                'name' => StringLength::class,
-	                'options' => [
-	                    'encoding' => 'UTF-8',
-	                    'min' => 1,
-	                    'max' => 100,
-	                ],
-	            ],
-	        ],
-	    ]);
-	    
-	    $this->inputFilter = $inputFilter;
-	    return $this->inputFilter;
-	}
+    }
+
+    public function getInputFilter()
+    {
+        if ($this->inputFilter) {
+            return $this->inputFilter;
+        }
+
+        $inputFilter = new InputFilter();
+
+        $inputFilter->add([
+            'name' => 'id',
+            'required' => true,
+            'filters' => [
+                ['name' => ToInt::class],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'artist',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],   // Remove unwanted HTML
+                ['name' => StringTrim::class],  // Remove unnecessary white space
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'title',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->inputFilter = $inputFilter;
+        return $this->inputFilter;
+    }
 }
