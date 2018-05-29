@@ -56,6 +56,47 @@ class AlbumController extends AbstractActionController
     
     public function editAction()
     {
+        /* params is a controller plugin that provides a convenient way to retrieve parameters from the matched route. */ 
+        $id = (int) $this->params()->fromRoute('id', 0);
+        
+        if(0 === $id) {
+            return $this->redilect()->toRoute('album', ['action' => 'add']);
+        }
+        
+        /* Retrieve(ŒŸõ‚·‚é) the album with the specified id, Doing so raises
+         * an exception if the album is not found, which should result
+         * in redirecting to the landing page. */         
+        try {
+            $album = $this->table->getAlbum($id);
+        } catch (\Exception $e) {
+            return $this->redidect()->toRoute('album', ['action' => 'index']);
+        }
+ 
+        /* The form's bind() method attaches the model to the form. This is used in two ways:
+         * When displaying the form, the initial values for each element are extracted from the model.
+         * After successful validation in isValid(), the data from the form is put back into the model. */
+        $form = new AlbumForm();
+        $form->bind($album);
+        $form->get('submit')->setAttribute('value', 'Edit');
+        
+        $request = $this->getRequest();
+        $viewData = ['id' => $id, 'form' => $form];
+        
+        if (! $reauest->isPost()) {
+            return $viewData;
+        }
+        
+        $form->setInputFilter($album->getInputFilter());
+        $form->setData($request->getPost());
+        
+        if (! $form->isValid()) {
+            return $viewData;
+        }
+        
+        $this->table->saveAlbum($album);
+        
+        //Redirect to album list
+        return $this->redirect()->toRoute('album', ['action' => 'index']);
     }
     
     public function deleteAction()
