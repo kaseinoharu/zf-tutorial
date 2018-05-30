@@ -59,8 +59,8 @@ class AlbumController extends AbstractActionController
         /* params is a controller plugin that provides a convenient way to retrieve parameters from the matched route. */ 
         $id = (int) $this->params()->fromRoute('id', 0);
         
-        if(0 === $id) {
-            return $this->redilect()->toRoute('album', ['action' => 'add']);
+        if (0 === $id) {
+            return $this->redirect()->toRoute('album', ['action' => 'add']);
         }
         
         /* Retrieve(ŒŸõ‚·‚é) the album with the specified id, Doing so raises
@@ -69,7 +69,7 @@ class AlbumController extends AbstractActionController
         try {
             $album = $this->table->getAlbum($id);
         } catch (\Exception $e) {
-            return $this->redidect()->toRoute('album', ['action' => 'index']);
+            return $this->redirect()->toRoute('album', ['action' => 'index']);
         }
  
         /* The form's bind() method attaches the model to the form. This is used in two ways:
@@ -95,7 +95,7 @@ class AlbumController extends AbstractActionController
         
         $this->table->saveAlbum($album);
         
-        //Redirect to album list
+        /* Redirect to album list */
         return $this->redirect()->toRoute('album', ['action' => 'index']);
     }
     

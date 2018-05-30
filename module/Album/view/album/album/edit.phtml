@@ -1,5 +1,5 @@
 <?php
-// module/Album/view/album/album/edit.phtml
+// module/Album/view/album/album/edit.phtml:
 
 $title = 'Edit album';
 $this->headTitle($title);
@@ -8,7 +8,7 @@ $this->headTitle($title);
 <?php
 $album = $form->get('title');
 $album->setAttribute('class', 'form-control');
-$album->setAttri('placeholder', 'Album title');
+$album->setAttribute('placeholder', 'Album title');
 
 $artist = $form->get('artist');
 $artist->setAttribute('class', 'form-control');
@@ -28,16 +28,16 @@ echo $this->form()->openTag($form);
 <div class="form-group">
     <?= $this->formLabel($album) ?>
     <?= $this->formElement($album) ?>
-    <?= $this->formElementErrors()->render($album, ['class' => 'help-block'])?>
+    <?= $this->formElementErrors()->render($album, ['class' => 'help-block']) ?>
 </div>
 
 <div class="form-group">
     <?= $this->formLabel($artist) ?>
     <?= $this->formElement($artist) ?>
-    <?= $this->formElementErrors()->render($artist, ['class' => 'help-block'])?>
+    <?= $this->formElementErrors()->render($artist, ['class' => 'help-block']) ?>
 </div>
 
 <?php
-echo $this->formSubit($submit);
+echo $this->formSubmit($submit);
 echo $this->formHidden($form->get('id'));
 echo $this->form()->closeTag();
