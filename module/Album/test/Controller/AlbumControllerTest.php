@@ -20,6 +20,16 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
             $configOverrides
         ));
         parent::setUp();
+ 
+        /* add some configuration to the test case to remove the database configuration. */
+        /* A failing test case -START- */
+        $services = $this->getApplicationServiceLocator();
+        $config = $services->get('config');
+        unset($config['db']);
+        $services->setAllowOverride(true);
+        $services->setService('config', $config);
+        $services->setAllowOverride(false);
+        /* A failing test case -END- */
     }
     
     public function testIndexActionCanBeAccessed()
