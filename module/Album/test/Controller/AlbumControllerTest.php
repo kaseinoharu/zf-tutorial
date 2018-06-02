@@ -7,7 +7,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class AlbumControllerTest extends AbstractHttpControllerTestCase
 {
-    protected $traceError = false;
+    /* true is the default. You'll get a list of the exceptions raised. */
+    protected $traceError = true;
     
     public function setUp()
     {
