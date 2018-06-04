@@ -24,6 +24,8 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
             $configOverrides
         ));
         parent::setUp();
+        
+        $this->configureServiceManager($this->getApplicationServiceLocator());
  
         /* add some configuration to the test case to remove the database configuration. */
         /* A failing test case -START- */
@@ -38,6 +40,8 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
     
     public function testIndexActionCanBeAccessed()
     {
+        $this->albumTable->fetchAll()->willReturn([]);
+        
         /* Asserts that the response code is 200, and 
          * ended up in the desired module and controller. */
         $this->dispatch('/album');
@@ -63,9 +67,12 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
         $config['db'] = [];
         return $config;
     }
-    
+
     protected function mockAlbumTable()
     {
+        /* create a mock instance of AlbumTable using Prophecy which is an object mocking framework
+         * that's buncled and integrated in PHPUnit.
+         */
         $this->albumTable = $this->prophersize(AlbumTable::class);
         return $this->albumTable;
     }
