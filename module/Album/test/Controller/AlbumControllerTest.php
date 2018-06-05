@@ -57,7 +57,7 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
         $services->setAllowOverride(true);
         
         $services->setService('config', $this->updateConfig($services->get('config')));
-        $servieces->setService(AlbumTable::class, $this->mockalbumTable->reveal());
+        $services->setService(AlbumTable::class, $this->mockAlbumTable()->reveal());
         
         $services->setallowOverride(false);
     }
@@ -73,7 +73,7 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
         /* create a mock instance of AlbumTable using Prophecy which is an object mocking framework
          * that's buncled and integrated in PHPUnit.
          */
-        $this->albumTable = $this->prophersize(AlbumTable::class);
+        $this->albumTable = $this->prophesize(AlbumTable::class);
         return $this->albumTable;
     }
 }
